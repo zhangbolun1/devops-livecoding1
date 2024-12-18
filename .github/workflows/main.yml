@@ -21,7 +21,16 @@ jobs:
           java-version: 17
           distribution: 'temurin'
 
-      # Build, test and analyze with SonarCloud
+      # Cache Maven dependencies for faster builds
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            maven-
+
+      # Build, test, and analyze with SonarCloud
       - name: Build, test and analyze with SonarCloud
         working-directory: ./simple-api
         run: |
