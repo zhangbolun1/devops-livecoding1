@@ -17,10 +17,11 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: 17
-          distribution: 'temurin' # 使用 Temurin 作为 JDK 分发版
+          distribution: 'temurin'
 
       # Build and test the project with Maven
       - name: Build and test with Maven
+        working-directory: ./simple-api # 确保这里是包含 pom.xml 的目录
         run: mvn clean verify
 
   build-and-push-docker-image:
