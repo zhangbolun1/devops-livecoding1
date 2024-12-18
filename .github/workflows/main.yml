@@ -1,10 +1,12 @@
 name: CI devops 2024
+
 on:
   push:
     branches:
       - main
       - develop
   pull_request:
+
 jobs:
   test-backend:
     runs-on: ubuntu-22.04
@@ -19,10 +21,15 @@ jobs:
           java-version: 17
           distribution: 'temurin'
 
-      # Build and test the project with Maven
-      - name: Build and test with Maven
-        working-directory: ./simple-api # 确保这里是包含 pom.xml 的目录
-        run: mvn clean verify
+      # Build, test and analyze with SonarCloud
+      - name: Build, test and analyze with SonarCloud
+        working-directory: ./simple-api
+        run: |
+          mvn -B verify sonar:sonar \
+            -Dsonar.projectKey=zhangbolun1 \
+            -Dsonar.organization=zhangbolun1 \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 
   build-and-push-docker-image:
     needs: test-backend
